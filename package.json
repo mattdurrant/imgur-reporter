@@ -1,0 +1,19 @@
+{
+  "name": "strava-reporter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matt Durrant",
+  "license": "ISC",
+  "dependencies": {
+    "got": "^11.5.1",
+    "moment": "^2.27.0",
+    "mysql2": "^2.1.0",
+    "ora": "^4.0.5",
+    "request-promise": "^4.2.5",
+    "strava": "0.0.2"
+  }
+}
