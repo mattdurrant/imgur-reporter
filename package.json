@@ -1,5 +1,5 @@
 {
-  "name": "strava-reporter",
+  "name": "imgur-reporter",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,11 +9,16 @@
   "author": "Matt Durrant",
   "license": "ISC",
   "dependencies": {
+    "basic-ftp": "^4.6.2",
     "got": "^11.5.1",
+    "image-downloader": "^4.0.1",
     "moment": "^2.27.0",
     "mysql2": "^2.1.0",
     "ora": "^4.0.5",
+    "request": "^2.88.2",
     "request-promise": "^4.2.5",
-    "strava": "0.0.2"
+    "sharp": "^0.25.4",
+    "strava": "0.0.2",
+    "thumbnail-generator": "^1.0.1"
   }
 }

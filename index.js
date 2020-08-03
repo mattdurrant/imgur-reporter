@@ -4,8 +4,11 @@ const request               = require('request-promise');
 const accessTokenRepository = require('./access-token-repository.js')
 const ora                   = require('ora')
 const config                = require('./config.json')
+const downloader            = require('./downloader.js')
+const thumbnailGenerator    = require('./thumbnail-generator.js');
 
-; (async () => {
+;
+ (async () => {
   await start();
 })()
 
@@ -13,6 +16,9 @@ async function start() {
     let imgurPhotos = await getImgurPhotos()
     if (imgurPhotos === null)
         return
+
+    await downloader.downloadImages(imgurPhotos)
+    await thumbnailGenerator.generate(imgurPhotos)
     await eventRepository.insert(imgurPhotos)
     process.exit()
 }
@@ -30,7 +36,6 @@ async function getImgurPhotos() {
             }
         };
 
-        let url = `https://api.imgur.com/3/account/mattdurrant/images/0`
         response = JSON.parse(await request.get(options)).data
     }
     catch {
@@ -42,18 +47,33 @@ async function getImgurPhotos() {
         return null
     }
 
+    
     const imgurPhotos = response.map(photo => ({
             title:          photo.title,
             link:           photo.link,
             width:          photo.width,
             height:         photo.height,
-            description:    `<a href='${photo.link}'>${photo.title}</a> ${photo.description} <a href='${photo.link}'><img src='${photo.link}'></img></a> `,
+            description:    getDescription(photo),
             timestamp:      moment.unix(photo.datetime).format()
         }))
 
-    console.log(imgurPhotos)
     spinner.succeed(`Retrieved ${response.length} photos from Imgur.`)
     return imgurPhotos
+}
+
+function getDescription(photo) {
+    if (photo.name === null && photo.description === null) {
+        return `<a href='${photo.link}'><br /><img src='${getThumbnailUrl(photo.link)}'></img></a> `
+    } else if (photo.description === null) {
+        return `<a href='${photo.link}'>${photo.title}</a> <a href='${photo.link}'><br /><img src='${getThumbnailUrl(photo.link)}'></img></a> `
+    }
+    return `<a href='${photo.link}'>${photo.title}</a> ${photo.description} <a href='${photo.link}'><br /><img src='${getThumbnailUrl(photo.link)}'></img></a> `
+}
+
+function getThumbnailUrl(link) {
+    let parts = link.split('/')
+    let filename = parts[parts.length-1]
+    return `./images/thumbnail-${filename}`
 }
 
 async function getAccessToken() {

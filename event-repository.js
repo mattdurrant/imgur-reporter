@@ -12,8 +12,6 @@ async function insert(imgurPhotos) {
 
     for (let i = 0; i < imgurPhotos.length; i++) {
         let sql = `INSERT INTO homepage.events (timestamp, details, type_ind) VALUES ("${imgurPhotos[i].timestamp}", "${imgurPhotos[i].description}", "imgurPhotos") ON DUPLICATE KEY UPDATE details = "${imgurPhotos[i].description}"`
-        console.log(sql)
-        
         await connection.query(sql)
     }
 }
