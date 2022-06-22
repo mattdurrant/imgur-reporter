@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "basic-ftp": "^4.6.2",
-    "got": "^11.5.1",
+    "got": "^11.8.5",
     "image-downloader": "^4.0.1",
     "moment": "^2.27.0",
     "mysql2": "^2.1.0",
